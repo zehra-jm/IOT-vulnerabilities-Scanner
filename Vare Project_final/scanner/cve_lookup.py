@@ -1,6 +1,6 @@
 from vulners import Vulners
 
-API_KEY = "JXKUDX95IQZ986HH1FJKJVWF4CB7D65R9HGQ4UN67ZB47Q31KBT5M4QOVZIQ5ZNT"
+API_KEY = "your API key"
 vulners = Vulners(api_key=API_KEY)
 
 def lookup_cves(service_name):
