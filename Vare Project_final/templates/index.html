@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>IoT Security Scanner</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <h1>IoT Security Scanner</h1>
+    <p>
+      Enter the subnet below (e.g., <code>192.168.1.0/24</code>) and click the
+      button to scan your network for vulnerable IoT devices.
+    </p>
+    <form action="{{ url_for('scan') }}" method="get">
+      <label for="subnet">Subnet:</label>
+      <input
+        type="text"
+        id="subnet"
+        name="subnet"
+        placeholder="192.168.1.0/24"
+        required
+      />
+      <button type="submit">Start Scan</button>
+    </form>
+  </body>
+</html>

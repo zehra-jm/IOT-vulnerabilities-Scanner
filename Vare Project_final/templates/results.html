@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Scan Results</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background: #f9f9f9;
+      }
+      h1 {
+        color: #333;
+      }
+      .device-card {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .section-title {
+        margin-top: 15px;
+        font-weight: bold;
+      }
+      .critical {
+        color: red;
+      }
+      ul {
+        margin-top: 5px;
+      }
+      .button-container {
+        margin-top: 30px;
+        display: flex;
+        gap: 15px;
+      }
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        text-decoration: none;
+        color: white;
+        background-color: #007bff;
+        transition: background-color 0.3s ease;
+      }
+      .btn:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Scan Results</h1>
+    <p><strong>Scan Time:</strong> {{ timestamp }}</p>
+
+    {% for device in devices %}
+    <div class="device-card">
+      <h2>{{ device.ip }} ({{ device.mac }})</h2>
+
+      <p><strong>Device Type:</strong> {{ device.device_name }}</p>
+
+      <div class="section-title">Open Ports:</div>
+      <ul>
+        {% for port in device.open_ports %}
+        <li>
+          <strong>Port {{ port.port }}:</strong> {{ port.service }} {% if
+          port.cves %}
+          <ul>
+            {% for cve in port.cves %}
+            <li class="critical">{{ cve.id }} – {{ cve.title }}</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <em>No known CVEs</em>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+
+      {% if device.weak_credentials %}
+      <div class="section-title critical">Weak Credentials Detected!</div>
+      <p>
+        Login succeeded with:
+        <strong>{{ device.credentials_used.username }}</strong> /
+        <strong>{{ device.credentials_used.password }}</strong>
+      </p>
+      {% else %}
+      <p><strong>Weak Credentials:</strong> None detected</p>
+      {% endif %}
+
+      <div class="section-title">Mitigation Recommendations:</div>
+      <ul>
+        {% for tip in device.mitigations %}
+        <li>{{ tip }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+
+    <!-- Buttons -->
+    <div class="button-container">
+      <a href="/generate_pdf" class="btn">Download Report (PDF)</a>
+      <a href="/back" class="btn">Back to Home</a>
+    </div>
+  </body>
+</html>
